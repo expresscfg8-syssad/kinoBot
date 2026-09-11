@@ -709,12 +709,29 @@ async def text_search(message: Message, state: FSMContext):
     finally:
         db.close()
 
-
+import os
+from aiohttp import web
 async def main():
     init_db()
     print("🚀 Bot tayyor va ishga tushdi!")
     await dp.start_polling(bot)
 
 
+async def handle(request):
+    return web.Response(text="Bot is running!")
+
+async def web_server():
+    app = web.Application()
+    app.router.add_get("/", handle)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    port = int(os.environ.get("PORT", 8080))
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+
+async def main_all():
+    await web_server()
+    await main()
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(main_all())
