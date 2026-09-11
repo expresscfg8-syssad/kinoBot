@@ -1,3 +1,2 @@
 aiogram==3.17.0
 sqlalchemy
-pydantic==2.6.3
